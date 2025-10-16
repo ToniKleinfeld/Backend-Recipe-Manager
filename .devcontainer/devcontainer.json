@@ -8,27 +8,50 @@
 
   "postCreateCommand": "git config --global --add safe.directory /workspace && mvn -v && java -version",
 
+  "mounts": [
+    "source=${localEnv:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
+    "source=${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+  ],
+
   "customizations": {
     "vscode": {
       "extensions": [
+        // ===== JAVA ESSENTIALS =====
         "vscjava.vscode-java-pack",
+        "redhat.java",
+        
+        // ===== SPRING BOOT =====
         "vscjava.vscode-spring-initializr",
         "vscjava.vscode-spring-boot-dashboard",
+        "vmware.vscode-spring-boot",
+        
+        // ===== DOCKER & DEVCONTAINER =====
         "ms-azuretools.vscode-docker",
         "ms-vscode-remote.remote-containers",
+        
+        // ===== GIT =====
         "eamodio.gitlens",
+        "mhutchie.git-graph",
+        
+        // ===== FILE SUPPORT =====
         "redhat.vscode-yaml",
+        "redhat.vscode-xml",
+        
+        // ===== PRODUCTIVITY =====
         "gruntfuggly.todo-tree",
-        "postman.postman-for-vscode",
-        "SonarSource.sonarlint-vscode",  
-        "streetsidesoftware.code-spell-checker"  
+        "aaron-bond.better-comments",
+        "PKief.material-icon-theme",
+        
+        // ===== API TESTING =====
+        "humao.rest-client",
+        
+        // ===== OPTIONAL =====
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
+        // ===== JAVA SETTINGS =====
         "java.configuration.updateBuildConfiguration": "automatic",
         "java.server.launchMode": "Standard",
-        "git.enabled": true,
-        "git.path": "/usr/bin/git",
         "java.jdt.ls.java.home": "/opt/java/openjdk",
         "java.configuration.runtimes": [
           {
@@ -37,19 +60,45 @@
             "default": true
           }
         ],
-        "sonarlint.rules": {
-          "java:S1068": {
-            "level": "off"  // Unused private fields
-          },
-          "java:S106": {
-            "level": "off"  // System.out.println in tests
-          }
+        "java.compile.nullAnalysis.mode": "automatic",
+        "java.debug.settings.onBuildFailureProceed": true,
+        
+        // ===== SPRING BOOT SETTINGS =====
+        "spring-boot.ls.java.home": "/opt/java/openjdk",
+        "spring.initializr.defaultLanguage": "Java",
+        
+        // ===== TERMINAL =====
+        "terminal.integrated.defaultProfile.linux": "bash",
+        
+        // ===== GIT =====
+        "git.enabled": true,
+        "git.path": "/usr/bin/git",
+        "git.autofetch": true,
+        "git.confirmSync": false,
+        
+        // ===== EDITOR =====
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
         },
-        "sonarlint.pathToNodeExecutable": "",
-        "sonarlint.disableTelemetry": true
+        "editor.suggestSelection": "first",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        
+        // ===== FILES =====
+        "files.exclude": {
+          "**/.classpath": true,
+          "**/.project": true,
+          "**/.settings": true,
+          "**/.factorypath": true
+        },
+        "files.watcherExclude": {
+          "**/target/**": true
+        }
       }
     }
   },
+  
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}

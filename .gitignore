@@ -111,3 +111,6 @@ Thumbs.db
 # Docker volumes
 pgdata/
 pgdata_dev/
+
+#Sonstiges
+note.md
