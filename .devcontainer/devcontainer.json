@@ -20,7 +20,7 @@
         "redhat.vscode-yaml",
         "gruntfuggly.todo-tree",
         "postman.postman-for-vscode",
-        "sonarsource.sonarlint-vscode",  
+        "SonarSource.sonarlint-vscode",  
         "streetsidesoftware.code-spell-checker"  
       ],
       "settings": {
@@ -36,7 +36,17 @@
             "path": "/opt/java/openjdk",
             "default": true
           }
-        ]
+        ],
+        "sonarlint.rules": {
+          "java:S1068": {
+            "level": "off"  // Unused private fields
+          },
+          "java:S106": {
+            "level": "off"  // System.out.println in tests
+          }
+        },
+        "sonarlint.pathToNodeExecutable": "",
+        "sonarlint.disableTelemetry": true
       }
     }
   },
