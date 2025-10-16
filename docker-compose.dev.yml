@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    container_name: recipe_db_dev
+    environment:
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME:-recipeuser}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-recipepass}
+      POSTGRES_DB: ${DB_NAME:-recipedb}
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile.dev
+    container_name: recipe_backend_dev
+    volumes:
+      - .:/workspace
+      - maven-repo:/root/.m2  # Maven Cache
+    ports:
+      - "8080:8080"
+      - "5005:5005"  # Debug Port
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-recipedb}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-recipeuser}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-recipepass}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    depends_on:
+      - db
+    command: sleep infinity
+
+volumes:
+  pgdata_dev:
+  maven-repo:

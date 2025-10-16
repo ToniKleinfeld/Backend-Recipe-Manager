@@ -1,0 +1,47 @@
+{
+  "name": "Recipe Manager DevEnv",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "backend",
+  "workspaceFolder": "/workspace",
+
+  "forwardPorts": [8080, 5432],
+
+  "postCreateCommand": "git config --global --add safe.directory /workspace && mvn -v && java -version",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-spring-boot-dashboard",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "gruntfuggly.todo-tree",
+        "postman.postman-for-vscode",
+        "sonarsource.sonarlint-vscode",  
+        "streetsidesoftware.code-spell-checker"  
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.server.launchMode": "Standard",
+        "git.enabled": true,
+        "git.path": "/usr/bin/git",
+        "java.jdt.ls.java.home": "/opt/java/openjdk",
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-21",
+            "path": "/opt/java/openjdk",
+            "default": true
+          }
+        ]
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  }
+}
