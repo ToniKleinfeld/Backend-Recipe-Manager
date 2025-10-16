@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     git \
     vim \
     wget \
-    && git config --global init.defaultBranch main \
+    && apt-get install -y git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /workspace

@@ -6,13 +6,6 @@
 
   "forwardPorts": [8080, 5432],
 
-  "postCreateCommand": "git config --global --add safe.directory /workspace && mvn -v && java -version",
-
-  "mounts": [
-    "source=${localEnv:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
-    "source=${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
-  ],
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -29,10 +22,6 @@
         "ms-azuretools.vscode-docker",
         "ms-vscode-remote.remote-containers",
         
-        // ===== GIT =====
-        "eamodio.gitlens",
-        "mhutchie.git-graph",
-        
         // ===== FILE SUPPORT =====
         "redhat.vscode-yaml",
         "redhat.vscode-xml",
@@ -43,64 +32,46 @@
         "PKief.material-icon-theme",
         
         // ===== API TESTING =====
-        "humao.rest-client",
-        
-        // ===== OPTIONAL =====
-        "streetsidesoftware.code-spell-checker"
+        "humao.rest-client"
       ],
-      "settings": {
-        // ===== JAVA SETTINGS =====
+      "settings": {        
+        // Java Configuration
+        "java.jdt.ls.java.home": null,
         "java.configuration.updateBuildConfiguration": "automatic",
         "java.server.launchMode": "Standard",
-        "java.jdt.ls.java.home": "/opt/java/openjdk",
-        "java.configuration.runtimes": [
-          {
-            "name": "JavaSE-21",
-            "path": "/opt/java/openjdk",
-            "default": true
-          }
-        ],
         "java.compile.nullAnalysis.mode": "automatic",
         "java.debug.settings.onBuildFailureProceed": true,
         
-        // ===== SPRING BOOT SETTINGS =====
-        "spring-boot.ls.java.home": "/opt/java/openjdk",
+        // Checkstyle
+        "java.checkstyle.version": "10.12.5",
+        "java.checkstyle.configuration": "${workspaceFolder}/checkstyle.xml",
+        
+        // Spring Boot
+        "spring-boot.ls.java.home": null,  // Auto-detect
         "spring.initializr.defaultLanguage": "Java",
         
-        // ===== TERMINAL =====
+        // Terminal
         "terminal.integrated.defaultProfile.linux": "bash",
         
-        // ===== GIT =====
+        // Git
         "git.enabled": true,
         "git.path": "/usr/bin/git",
         "git.autofetch": true,
-        "git.confirmSync": false,
         
-        // ===== EDITOR =====
+        // Editor
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.organizeImports": "explicit"
-        },
-        "editor.suggestSelection": "first",
-        "editor.tabSize": 4,
-        "editor.insertSpaces": true,
-        
-        // ===== FILES =====
-        "files.exclude": {
-          "**/.classpath": true,
-          "**/.project": true,
-          "**/.settings": true,
-          "**/.factorypath": true
-        },
-        "files.watcherExclude": {
-          "**/target/**": true
         }
       }
     }
-  },
-  
+  },  
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
-  }
+  },
+  "containerEnv": {
+    "JAVA_HOME": "/opt/java/openjdk"
+  },
+  "waitFor": "onCreateCommand"
 }
