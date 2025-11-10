@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.recipemanager.dto.RecipeRequest;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.service.RecipeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -38,8 +41,9 @@ public class RecipeController {
 
     // POST /api/recipes
     @PostMapping
-    public Recipe createRecipe(@RequestBody Recipe recipe) {
-        return recipeService.createRecipe(recipe);
+    public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody RecipeRequest request) {
+        Recipe recipe = recipeService.createRecipe(request);
+        return ResponseEntity.ok(recipe);
     }
 
     // DELETE /api/recipes/{id}
