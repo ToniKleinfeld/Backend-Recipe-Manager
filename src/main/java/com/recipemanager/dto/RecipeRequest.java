@@ -1,5 +1,8 @@
 package com.recipemanager.dto;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -11,6 +14,9 @@ public class RecipeRequest {
 
     @Size(max = 5000, message = "Description darf max. 5000 Zeichen sein")
     private String description;
+
+    @Valid
+    private List<IngredientRequest> ingredients;
 
     // Getter/Setter
     public String getTitle() {
@@ -27,5 +33,13 @@ public class RecipeRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<IngredientRequest> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<IngredientRequest> ingredients) {
+        this.ingredients = ingredients;
     }
 }
