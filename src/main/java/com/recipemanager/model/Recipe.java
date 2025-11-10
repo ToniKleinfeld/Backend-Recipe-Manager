@@ -41,7 +41,9 @@ public class Recipe {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        if (id > 0) {
+            this.id = id;
+        }
     }
 
     public String getTitle() {
