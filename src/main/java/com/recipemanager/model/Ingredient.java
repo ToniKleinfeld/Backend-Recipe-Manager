@@ -1,7 +1,11 @@
 package com.recipemanager.model;
 
+import com.recipemanager.enums.Unit;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,13 +22,14 @@ public class Ingredient {
     private Long id;
 
     @Column(nullable = false)
-    private String title; // e.g. "Mehl"
+    private String title;
 
-    @Column(nullable = false)
-    private Double amount; // e.g. 200.0
+    @Column(nullable = true)
+    private Double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String unit; // e.g. "Gramm"
+    private Unit unit;
 
     // 🔗 Beziehung zu Recipe
     @ManyToOne
@@ -35,7 +40,7 @@ public class Ingredient {
     public Ingredient() {
     }
 
-    public Ingredient(String title, Double amount, String unit, Recipe recipe) {
+    public Ingredient(String title, Double amount, Unit unit, Recipe recipe) {
         this.title = title;
         this.amount = amount;
         this.unit = unit;
@@ -63,11 +68,11 @@ public class Ingredient {
         this.amount = amount;
     }
 
-    public String getUnit() {
+    public Unit getUnit() {
         return unit;
     }
 
-    public void setUnit(String unit) {
+    public void setUnit(Unit unit) {
         this.unit = unit;
     }
 
