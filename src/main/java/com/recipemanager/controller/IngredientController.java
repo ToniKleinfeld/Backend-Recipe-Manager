@@ -1,20 +1,22 @@
 package com.recipemanager.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.recipemanager.dto.IngredientRequest;
+import com.recipemanager.dto.IngredientResponse;
 import com.recipemanager.model.Ingredient;
 import com.recipemanager.service.IngredientService;
 
@@ -34,13 +36,22 @@ public class IngredientController {
      * GET /api/recipes/5/ingredients
      * 
      * @param recipeId Die ID des Rezepts
-     * @return Liste aller Zutaten mit Status 200
+     * @return Array von IngredientResponse
      */
     @GetMapping
-    public ResponseEntity<List<Ingredient>> getIngredientsByRecipe(
+    public ResponseEntity<List<IngredientResponse>> getIngredientsByRecipe(
             @PathVariable Long recipeId) {
         List<Ingredient> ingredients = ingredientService.getIngredientsByRecipeId(recipeId);
-        return ResponseEntity.ok(ingredients);
+
+        List<IngredientResponse> responses = ingredients.stream()
+                .map(ing -> new IngredientResponse(
+                        ing.getId(),
+                        ing.getTitle(),
+                        ing.getAmount(),
+                        ing.getUnit()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responses);
     }
 
     // ========== CREATE ==========
@@ -48,44 +59,58 @@ public class IngredientController {
     /**
      * Neue Zutat zu einem Rezept hinzufügen
      * POST /api/recipes/5/ingredients
-     * Body: {"title": "Mehl", "amount": 200.0, "unit": "G"}
      * 
      * @param recipeId Die ID des Rezepts
      * @param request  Die Zutat-Daten
      * @return Die neue Zutat mit Status 201 Created
      */
     @PostMapping
-    public ResponseEntity<Ingredient> createIngredient(
+    public ResponseEntity<IngredientResponse> createIngredient(
             @PathVariable Long recipeId,
             @Valid @RequestBody IngredientRequest request) {
         try {
             Ingredient ingredient = ingredientService.createIngredient(recipeId, request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(ingredient);
+
+            // ✅ Konvertiere zu DTO
+            IngredientResponse response = new IngredientResponse(
+                    ingredient.getId(),
+                    ingredient.getTitle(),
+                    ingredient.getAmount(),
+                    ingredient.getUnit());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    // ========== UPDATE ==========
+    // ========== PATCH ==========
 
     /**
-     * Eine Zutat aktualisieren
-     * PUT /api/recipes/5/ingredients/1
-     * Body: {"title": "Mehl Premium", "amount": 300.0, "unit": "G"}
+     * Eine Zutat aktualisieren (PATCH - Partial Update)
+     * PATCH /api/recipes/5/ingredients/1
      * 
-     * @param recipeId     Die ID des Rezepts (für Route, aber nicht verwendet)
+     * @param recipeId     Die ID des Rezepts
      * @param ingredientId Die ID der Zutat
-     * @param request      Die neuen Daten
+     * @param request      Die zu ändernden Daten
      * @return Die aktualisierte Zutat oder 404
      */
-    @PutMapping("/{ingredientId}")
-    public ResponseEntity<Ingredient> updateIngredient(
+    @PatchMapping("/{ingredientId}")
+    public ResponseEntity<IngredientResponse> updateIngredient(
             @PathVariable Long recipeId,
             @PathVariable Long ingredientId,
             @Valid @RequestBody IngredientRequest request) {
         try {
             Ingredient ingredient = ingredientService.updateIngredient(ingredientId, request);
-            return ResponseEntity.ok(ingredient);
+
+            // ✅ Konvertiere zu DTO
+            IngredientResponse response = new IngredientResponse(
+                    ingredient.getId(),
+                    ingredient.getTitle(),
+                    ingredient.getAmount(),
+                    ingredient.getUnit());
+
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }

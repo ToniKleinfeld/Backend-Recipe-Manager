@@ -43,6 +43,7 @@ public class IngredientService {
      * @throws IllegalArgumentException wenn Rezept nicht existiert
      */
     public Ingredient createIngredient(Long recipeId, IngredientRequest request) {
+        @SuppressWarnings("null")
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Rezept mit ID " + recipeId + " nicht gefunden"));
@@ -67,6 +68,7 @@ public class IngredientService {
      * @throws IllegalArgumentException wenn Zutat nicht existiert
      */
     public Ingredient updateIngredient(Long id, IngredientRequest request) {
+        @SuppressWarnings("null")
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Zutat mit ID " + id + " nicht gefunden"));
@@ -86,6 +88,7 @@ public class IngredientService {
      * @param id Die ID der Zutat
      * @throws IllegalArgumentException wenn Zutat nicht existiert
      */
+    @SuppressWarnings("null")
     public void deleteIngredient(Long id) {
         if (!ingredientRepository.existsById(id)) {
             throw new IllegalArgumentException(

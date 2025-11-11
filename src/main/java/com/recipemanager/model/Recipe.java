@@ -1,6 +1,7 @@
 package com.recipemanager.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -29,16 +30,18 @@ public class Recipe {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ingredient> ingredients;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     // Konstruktoren
     public Recipe() {
+        this.ingredients = new ArrayList<>();
     }
 
     public Recipe(String title, String description) {
         this.title = title;
         this.description = description;
         this.createdAt = LocalDateTime.now();
+        this.ingredients = new ArrayList<>();
     }
 
     // Getter und Setter
@@ -81,6 +84,6 @@ public class Recipe {
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+        this.ingredients = ingredients != null ? ingredients : new ArrayList<>();
     }
 }

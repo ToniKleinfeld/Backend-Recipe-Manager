@@ -43,6 +43,7 @@ public class RecipeService {
     /**
      * Ein Rezept mit allen Details + Zutaten
      */
+    @SuppressWarnings("null")
     public Optional<RecipeDetailResponse> getRecipeById(Long id) {
         return recipeRepository.findById(id)
                 .map(recipe -> {
@@ -69,6 +70,7 @@ public class RecipeService {
     /**
      * Neues Rezept mit Zutaten erstellen
      */
+    @SuppressWarnings("null")
     public Recipe createRecipe(RecipeRequest request) {
         Recipe recipe = new Recipe(request.getTitle(), request.getDescription());
         Recipe savedRecipe = recipeRepository.save(recipe);
@@ -96,6 +98,7 @@ public class RecipeService {
      * Rezept mit Zutaten aktualisieren
      */
     public Recipe updateRecipe(Long id, RecipeRequest request) {
+        @SuppressWarnings("null")
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Rezept mit ID " + id + " nicht gefunden"));
@@ -123,6 +126,7 @@ public class RecipeService {
 
     // ========== DELETE ==========
 
+    @SuppressWarnings("null")
     public void deleteRecipe(Long id) {
         recipeRepository.deleteById(id);
     }
